@@ -4,11 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.github.asufana</groupId>
-	<artifactId>VOGenProject</artifactId>
+	<artifactId>VOGeneratorProject</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<name>VOGenProject</name>
+	<name>VOGeneratorProject</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -24,8 +24,8 @@
 	</dependencies>
 
 	<modules>
-		<module>VOGen</module>
-		<module>VOGenSample</module>
+		<module>VOGenerator</module>
+		<module>VOGeneratorSample</module>
 	</modules>
 
 </project>
