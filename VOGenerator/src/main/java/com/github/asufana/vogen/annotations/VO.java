@@ -2,8 +2,9 @@ package com.github.asufana.vogen.annotations;
 
 import java.lang.annotation.*;
 
-@Retention(RetentionPolicy.SOURCE)
-@Target({ElementType.TYPE})
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
 public @interface VO {
-    
+    /** VO list */
+    VODef[] value();
 }
