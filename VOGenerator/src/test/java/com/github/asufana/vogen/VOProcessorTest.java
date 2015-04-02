@@ -20,6 +20,7 @@ public class VOProcessorTest {
                  .generatesSources(JavaFileObjects.forSourceString("domain.model.company.CompanyName",
                                                                    "package domain.model.company;\n"
                                                                            + "\n"
+                                                                           + "import com.github.asufana.ddd.vo.AbstractValueObject;\n"
                                                                            + "import java.lang.String;\n"
                                                                            + "import javax.annotation.Generated;\n"
                                                                            + "import javax.persistence.Embeddable;\n"
@@ -30,10 +31,11 @@ public class VOProcessorTest {
                                                                            + "@Getter\n"
                                                                            + "@Accessors(\n fluent = true\n)\n"
                                                                            + "@Generated({\"com.github.asufana.vogen.VOProcessor\"})\n"
-                                                                           + "public class CompanyName {\n"
+                                                                           + "public class CompanyName extends AbstractValueObject {\n"
                                                                            + "  private final String value;\n\n"
                                                                            + "  public CompanyName(final String value) {\n"
                                                                            + "    this.value = value;\n"
+                                                                           + "    validate();\n"
                                                                            + "  }\n"
                                                                            + "}"));
     }

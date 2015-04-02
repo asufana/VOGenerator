@@ -73,5 +73,22 @@
 			<artifactId>hibernate-core</artifactId>
 			<version>3.6.10.Final</version>
 		</dependency>
+		<dependency>
+			<groupId>com.github.asufana</groupId>
+			<artifactId>DDD-java</artifactId>
+			<version>1.0</version>
+		</dependency>
 	</dependencies>
+
+	<repositories>
+		<repository>
+			<id>DDD-java</id>
+			<url>https://raw.github.com/asufana/DDD-java/mvn-repo/</url>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</snapshots>
+		</repository>
+	</repositories>
+
 </project>

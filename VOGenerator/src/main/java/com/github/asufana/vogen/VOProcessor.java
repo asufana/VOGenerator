@@ -39,10 +39,10 @@ public class VOProcessor extends AbstractProcessor {
                                                  .addStatement("this.$N = $N",
                                                                "value",
                                                                "value")
-                                                 //.addStatement("validate()")
+                                                 .addStatement("validate()")
                                                  .build();
         final TypeSpec typeSpec = TypeSpec.classBuilder(className)
-                                          //.superclass(play.modules.ddd.vo.AbstractValueObject.class)
+                                          .superclass(com.github.asufana.ddd.vo.AbstractValueObject.class)
                                           .addJavadoc(annotation.title())
                                           .addAnnotation(javax.persistence.Embeddable.class)
                                           .addAnnotation(lombok.Getter.class)
