@@ -5,7 +5,6 @@ import static javax.lang.model.SourceVersion.*;
 import java.io.*;
 import java.util.*;
 
-import javax.annotation.*;
 import javax.annotation.processing.*;
 import javax.lang.model.element.*;
 import javax.tools.*;
@@ -21,7 +20,7 @@ public class VOProcessor extends AbstractProcessor {
     @Override
     public boolean process(final Set<? extends TypeElement> annotations,
                            final RoundEnvironment roundEnv) {
-        final Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(VO.class);
+        final Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(VODef.class);
         for (final Element element : elements) {
             generateClass(element);
         }
@@ -29,23 +28,43 @@ public class VOProcessor extends AbstractProcessor {
     }
     
     private void generateClass(final Element element) {
-        final String className = "Blah";
-        final PackageElement aPackage = MoreElements.getPackage(element);
+        final VODef annotation = element.getAnnotation(VODef.class);
+        final String className = annotation.className();
+        
+        final MethodSpec constructor = MethodSpec.constructorBuilder()
+                                                 .addModifiers(Modifier.PUBLIC)
+                                                 .addParameter(String.class,
+                                                               "value",
+                                                               Modifier.FINAL)
+                                                 .addStatement("this.$N = $N",
+                                                               "value",
+                                                               "value")
+                                                 //.addStatement("validate()")
+                                                 .build();
         final TypeSpec typeSpec = TypeSpec.classBuilder(className)
-                                          .addAnnotation(AnnotationSpec.builder(Generated.class)
+                                          //.superclass(play.modules.ddd.vo.AbstractValueObject.class)
+                                          .addJavadoc(annotation.title())
+                                          .addAnnotation(javax.persistence.Embeddable.class)
+                                          .addAnnotation(lombok.Getter.class)
+                                          .addAnnotation(AnnotationSpec.builder(lombok.experimental.Accessors.class)
+                                                                       .addMember("fluent",
+                                                                                  "$L",
+                                                                                  "true")
+                                                                       .build())
+                                          .addAnnotation(AnnotationSpec.builder(javax.annotation.Generated.class)
                                                                        .addMember("value",
                                                                                   "{$S}",
                                                                                   getClass().getCanonicalName())
                                                                        .build())
                                           .addModifiers(Modifier.PUBLIC)
-                                          .addMethod(MethodSpec.methodBuilder("hello")
-                                                               .addModifiers(Modifier.PUBLIC)
-                                                               .addCode(CodeBlock.builder()
-                                                                                 .add("return \"hello\";\n")
-                                                                                 .build())
-                                                               .returns(TypeName.get(String.class))
-                                                               .build())
+                                          .addField(String.class,
+                                                    "value",
+                                                    Modifier.PRIVATE,
+                                                    Modifier.FINAL)
+                                          .addMethod(constructor)
                                           .build();
+        
+        final PackageElement aPackage = MoreElements.getPackage(element);
         final JavaFile javaFile = JavaFile.builder(aPackage.getQualifiedName()
                                                            .toString(),
                                                    typeSpec).build();

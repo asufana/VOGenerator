@@ -2,7 +2,13 @@ package com.github.asufana.vogensample;
 
 import com.github.asufana.vogen.annotations.*;
 
-@VO
-public class AbstractUserName {
+@VODef(title = "会社名",
+       className = "CompanyName",
+       type = "String",
+       nullable = false,
+       length = "100")
+public class Company {
+    
+    private CompanyName name;
     
 }
