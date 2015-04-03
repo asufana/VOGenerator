@@ -20,15 +20,17 @@ public class VOProcessor extends AbstractProcessor {
     @Override
     public boolean process(final Set<? extends TypeElement> annotations,
                            final RoundEnvironment roundEnv) {
-        final Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(VODef.class);
+        final Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(VOs.class);
         for (final Element element : elements) {
-            generateClass(element);
+            final PackageElement pkg = MoreElements.getPackage(element);
+            for (final VO voAnnotations : element.getAnnotationsByType(VO.class)) {
+                generateClass(voAnnotations, pkg);
+            }
         }
         return true;
     }
     
-    private void generateClass(final Element element) {
-        final VODef annotation = element.getAnnotation(VODef.class);
+    private void generateClass(final VO annotation, final PackageElement pkg) {
         final String className = annotation.className();
         
         final MethodSpec constructor = MethodSpec.constructorBuilder()
@@ -64,12 +66,11 @@ public class VOProcessor extends AbstractProcessor {
                                           .addMethod(constructor)
                                           .build();
         
-        final PackageElement aPackage = MoreElements.getPackage(element);
-        final JavaFile javaFile = JavaFile.builder(aPackage.getQualifiedName()
-                                                           .toString(),
+        final JavaFile javaFile = JavaFile.builder(pkg.getQualifiedName()
+                                                      .toString(),
                                                    typeSpec).build();
         
-        final String fqcn = aPackage.toString() + "." + className;
+        final String fqcn = pkg.toString() + "." + className;
         writeClass(fqcn, javaFile);
     }
     
