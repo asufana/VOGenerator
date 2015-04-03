@@ -31,46 +31,10 @@ public class VOProcessor extends AbstractProcessor {
     }
     
     private void generateClass(final VO annotation, final PackageElement pkg) {
-        final String className = annotation.className();
-        
-        final MethodSpec constructor = MethodSpec.constructorBuilder()
-                                                 .addModifiers(Modifier.PUBLIC)
-                                                 .addParameter(String.class,
-                                                               "value",
-                                                               Modifier.FINAL)
-                                                 .addStatement("this.$N = $N",
-                                                               "value",
-                                                               "value")
-                                                 .addStatement("validate()")
-                                                 .build();
-        final TypeSpec typeSpec = TypeSpec.classBuilder(className)
-                                          .superclass(com.github.asufana.ddd.vo.AbstractValueObject.class)
-                                          .addJavadoc(annotation.title())
-                                          .addAnnotation(javax.persistence.Embeddable.class)
-                                          .addAnnotation(lombok.Getter.class)
-                                          .addAnnotation(AnnotationSpec.builder(lombok.experimental.Accessors.class)
-                                                                       .addMember("fluent",
-                                                                                  "$L",
-                                                                                  "true")
-                                                                       .build())
-                                          .addAnnotation(AnnotationSpec.builder(javax.annotation.Generated.class)
-                                                                       .addMember("value",
-                                                                                  "{$S}",
-                                                                                  getClass().getCanonicalName())
-                                                                       .build())
-                                          .addModifiers(Modifier.PUBLIC)
-                                          .addField(String.class,
-                                                    "value",
-                                                    Modifier.PRIVATE,
-                                                    Modifier.FINAL)
-                                          .addMethod(constructor)
-                                          .build();
-        
-        final JavaFile javaFile = JavaFile.builder(pkg.getQualifiedName()
-                                                      .toString(),
-                                                   typeSpec).build();
-        
-        final String fqcn = pkg.toString() + "." + className;
+        final JavaFile javaFile = JavaSourceGenerator.generate(pkg,
+                                                               annotation,
+                                                               this.getClass());
+        final String fqcn = pkg.toString() + "." + annotation.className();
         writeClass(fqcn, javaFile);
     }
     
