@@ -34,7 +34,7 @@ public class VOProcessor extends AbstractProcessor {
         final JavaFile javaFile = JavaSourceGenerator.generate(pkg,
                                                                annotation,
                                                                this.getClass());
-        final String fqcn = pkg.toString() + "." + annotation.className();
+        final String fqcn = pkg.toString() + ".vo." + annotation.className();
         writeClass(fqcn, javaFile);
     }
     

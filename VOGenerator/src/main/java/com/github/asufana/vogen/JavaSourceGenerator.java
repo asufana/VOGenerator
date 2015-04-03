@@ -34,8 +34,8 @@ public class JavaSourceGenerator {
                                           .addMethod(buildConstructor())
                                           .build();
         
-        return JavaFile.builder(pkg.getQualifiedName().toString(), typeSpec)
-                       .build();
+        return JavaFile.builder(pkg.getQualifiedName().toString() + ".vo",
+                                typeSpec).build();
     }
     
     private static MethodSpec buildConstructor() {

@@ -18,7 +18,7 @@ public class VOProcessorTest {
                  .compilesWithoutError()
                  .and()
                  .generatesSources(JavaFileObjects.forSourceString("domain.model.company.CompanyName",
-                                                                   "package domain.model.company;\n"
+                                                                   "package domain.model.company.vo;\n"
                                                                            + "\n"
                                                                            + "import com.github.asufana.ddd.vo.AbstractValueObject;\n"
                                                                            + "import java.lang.String;\n"
