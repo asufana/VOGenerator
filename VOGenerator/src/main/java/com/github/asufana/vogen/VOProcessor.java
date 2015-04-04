@@ -23,6 +23,11 @@ public class VOProcessor extends AbstractProcessor {
         final Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(VOs.class);
         for (final Element element : elements) {
             final PackageElement pkg = MoreElements.getPackage(element);
+            
+            //TODO check existing classes
+            //final String packageName = packageName(pkg);
+            //final Set<Class<?>> existClasses = new Reflections(packageName(pkg)).getSubTypesOf(Object.class);
+            
             for (final VO voAnnotations : element.getAnnotationsByType(VO.class)) {
                 generateClass(voAnnotations, pkg);
             }
@@ -30,12 +35,22 @@ public class VOProcessor extends AbstractProcessor {
         return true;
     }
     
+    private String packageName(final PackageElement pkg) {
+        return pkg.toString() + ".vo";
+    }
+    
+    private String canonicalClassName(final PackageElement pkg,
+                                      final String className) {
+        return packageName(pkg) + "." + className;
+    }
+    
     private void generateClass(final VO annotation, final PackageElement pkg) {
         final JavaFile javaFile = JavaSourceGenerator.generate(pkg,
                                                                annotation,
                                                                this.getClass());
-        final String fqcn = pkg.toString() + ".vo." + annotation.className();
-        writeClass(fqcn, javaFile);
+        final String canonicalClassName = canonicalClassName(pkg,
+                                                             annotation.className());
+        writeClass(canonicalClassName, javaFile);
     }
     
     private void writeClass(final String fqcn, final JavaFile javaFile) {
